@@ -16,7 +16,6 @@ class page_four extends Controller {
 				'img' => str_replace('"','',base64_decode($_SESSION["img"])),
 				'permisos' => json_decode( base64_decode($_SESSION["permisions"]), true)
 			];
-			//return $this->buscar_atributos($parametro);
 			return view('atributos')->with('config',$config)->with('unlock_pass','')->with('atributos',$this->buscar_atributos($parametro))->withSuccess('Añadir Nuevo Atributo');
 		}
 	}  

@@ -20,7 +20,7 @@
 	                    <div class="col-md-3">
 	                        <div class="form-group">
 	                            <label>Username</label>
-	                            <input type="text" class="form-control" placeholder="Username" value="michael23">
+	                            <input type="text" class="form-control" placeholder="Username" value="{{$config['username']}}">
 	                        </div>
 	                    </div>
 	                    <div class="col-md-4">

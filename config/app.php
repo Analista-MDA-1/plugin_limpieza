@@ -10,10 +10,10 @@ return [
     | This value is the name of your application. This value is used when the
     | framework needs to place the application's name in a notification or
     | any other location as required by the application or its packages.
-    |
+    | 
     */ 
-    'tkn_url' => env('LOVYVERSE_URL',null),
-    'tkn_lovyverse' => env('LOVYVERSE_TOKEN',null),
+    'api_rest_url' => env('API_REST_URL',null),
+    'api_rest_tkn' => env('API_REST_TKN',null),
 
     'name' => env('APP_NAME', 'Laravel'),
 

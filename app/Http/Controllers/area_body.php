@@ -23,4 +23,4 @@ class area_body extends Controller {
 		}
 	}
 
-}
+} 
