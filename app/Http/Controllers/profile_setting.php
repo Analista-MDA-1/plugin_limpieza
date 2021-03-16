@@ -16,7 +16,7 @@ class profile_setting extends Controller {
 				'permisos' => json_decode( base64_decode($_SESSION["permisions"]), true)
 			];
 			/*Http::withHeaders([  
-	          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
+	          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]), 
 	        ])->get(config('app.api_rest_url').'/get_session_img');*/
 			return view('profile')->with('config',$config)->with('unlock_pass','')->withSuccess('Mi Perfil');
 		}

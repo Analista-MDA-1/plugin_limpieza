@@ -11,12 +11,6 @@
     	</form>
     	<label id="label_msg" style="color: #FF0000"></label>
     </div>  
-    <div>
-    	<select>
-    		<option style="float: left;clear: left;">ADIO</option>
-    		<option style="float: right;clear: right;">ADIO</option>
-    	</select>
-    </div>
     <div class="card" id="table_attribute" >
         <div class="content table-responsive table-full-width" style="overflow-x: hidden;">
 	        <table class="table table-hover table-striped">
@@ -71,7 +65,7 @@
 		    <div class="modal-footer">
 		    	<button type="submit" class="btn btn-success">Añadir</button>
 		    	</form>
-		    	<button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+		    	<button></button> type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
 		    </div>
 		</div>
 	</div>

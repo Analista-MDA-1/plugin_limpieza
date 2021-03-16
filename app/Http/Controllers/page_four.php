@@ -22,14 +22,14 @@ class page_four extends Controller {
 	private function buscar_atributos($value) { 
         $aux = Http::withHeaders([
           'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
-        ])->get(config('app.api_rest_url').'/atrribute');
+        ])->get(config('app.api_rest_url').'/atrribute');$temp = [];
         $aux = json_decode($aux, true); 
         /*foreach ( $aux['Attribute'] as $key => $atributo ) {
         	$temp[$key]['id'] = json_decode($atributo['id'],true);
         	$temp[$key]['fecha'] = json_encode($atributo['updated_at'],JSON_UNESCAPED_UNICODE);
         	$temp[$key]['nombre'] = json_encode($atributo['attribute'],JSON_UNESCAPED_UNICODE);
         	$temp[$key]['estado'] = json_decode($atributo['status'],true);
-        }*/
+        }*/  
         if ( is_null($value) || empty($value) ) {
         	foreach ( $aux['Attribute'] as $key => $atributo ) {
 	        	$temp[$key]['id'] = $atributo['id'];

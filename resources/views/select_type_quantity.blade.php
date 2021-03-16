@@ -23,7 +23,7 @@
                                 <div class="col-md-6" hidden="true" id="div_quantity">
                                     <div class="form-group">
                                         <label>Cantidad</label>
-                                        <input type="" name="quantity" class="form-control">
+                                        <input type="number" name="quantity" class="form-control">
                                     </div>
                                 </div>
                         	</div>

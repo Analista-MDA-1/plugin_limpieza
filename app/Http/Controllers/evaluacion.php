@@ -21,6 +21,9 @@ class evaluacion extends Controller {
         }
       }
       public function post_selection(request $data) {
+        if ($data['quantity'] < 1) {
+          return redirect()->back()->withErrors('Indique la Cantidad de Áreas');
+        }
         if ( $data['type'] == '200xc' ) {
           $data = '1';
         }

@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-session_start();
+session_start(); 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -16,6 +16,7 @@ class page_three extends Controller {
 				'img' => str_replace('"','',base64_decode($_SESSION["img"])),
 				'permisos' => json_decode( base64_decode($_SESSION["permisions"]), true)
 			];
+
 			return view('new_area')->with('config',$config)->with('unlock_pass','')->with('datos',$this->datos())->withSuccess('Añadir Nuevo Atributo');
 		}
 	}
@@ -41,8 +42,12 @@ class page_three extends Controller {
         if (  $source_room == '__Mixta__' || $source_room == '__PMS__' ) {
         	# code...
         }*/
+        $pms_rooms = Http::withHeaders([ 
+	          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
+	        ])->get(config('app.api_rest_url').'/get_pms_rooms');
         $datos = [
 			'categorias' => $temp_ctg,
+			'areas_pms' => $pms_rooms['Pms_Rooms'],
         ];
         return $datos;
 	}

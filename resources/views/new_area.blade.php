@@ -18,6 +18,10 @@
     		</select>
     		<select class="form-control" style="display: none;"  id="area_externa" name="area_externa">
     			<option value="nix" style="color: #0000FF;">Area Externa</option>
+                @forelse( $datos['areas_pms'] as $extern_area )
+                    <option value="{{$extern_area['id']}}">{{$extern_area['nickname']}}</option>
+                @empty
+                @endforelse
     		</select>
     		<input type="" name="nickname" class="form-control" placeholder="Apodo o Identificador del Area">
 		    <select class="form-control" name="statu_area">
