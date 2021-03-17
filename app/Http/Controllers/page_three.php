@@ -45,7 +45,7 @@ class page_three extends Controller {
         $pms_rooms = Http::withHeaders([ 
 	          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
 	        ])->get(config('app.api_rest_url').'/get_pms_rooms');
-        $datos = [
+        $datos = [  
 			'categorias' => $temp_ctg,
 			'areas_pms' => $pms_rooms['Pms_Rooms'],
         ];
