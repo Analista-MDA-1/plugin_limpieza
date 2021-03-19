@@ -37,20 +37,62 @@ class evaluacion extends Controller {
             'todas_areas' => $all_areas,
             'aleat_areas' => 'none',
           ];
+          $temp = Http::withHeaders([
+            'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
+          ])->post(config('app.api_rest_url').'/report',[
+            'comentarios_in' => 'Sin Comentarios',
+            'quantity_review' => 0,
+            'type_selection' => 1,
+          ]);
         }
         else if ( $data['type'] == '350ms' ) { 
           $areas = $this->random_areas($data['quantity']);
+          if ( $areas[0] == 'max') {
+            return redirect()->back()->withErrors('Solo hay '.$areas[1].' Áreas Disponibles..!');
+          }
           $all_areas = $this->selective_areas();
           $datos = [
             'todas_areas' => $all_areas,
             'aleat_areas' => $areas,
+            'atributos' => $this->atributtes(),
           ];
-          if ( $areas[0] == 'max') {
-            return redirect()->back()->withErrors('Solo hay '.$areas[1].' Áreas Disponibles..!');
+          $temp = Http::withHeaders([
+            'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
+          ])->post(config('app.api_rest_url').'/report',[
+            'comentarios_in' => 'Sin Comentarios',
+            'quantity_review' => count($datos['aleat_areas']),
+            'type_selection' => 2,
+          ]); 
+          foreach ($datos['aleat_areas'] as $key => $area) {
+            $temp_body = $this->add_areaTO_report($temp['Report_Header'],$area['id']);
           }
+          //return $temp_body;
         }
-        return view('evaluacion_multiples_areas')->with('config',$config)->with('unlock_pass','');
-        return $datos;
+        return redirect()->route('evaluacion_show', $temp['Report_Header']);
+        /*return view('evaluacion_multiples_areas')->with('datos',$datos)->with('config',$config)->with('unlock_pass','');
+        return $datos;*/
+      }
+      private function get_report_body($id) {
+        $aux_atributos = Http::withHeaders([
+              'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
+            ])->get(config('app.api_rest_url').'/report_body_header/'.$id);
+        $aux_atributos = json_decode($aux_atributos, true);
+        return $aux_atributos['Body_Area'];
+      }
+      public function add_areaTO_report($id_header,$id_area) {
+        $temp_body = Http::withHeaders([
+          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
+        ])->post(config('app.api_rest_url').'/report_body',[
+          'ref_id_header' => $id_header,
+          'ref_id_area' => $id_area
+        ]);
+      }
+      private function atributtes() {
+        $aux_atributos = Http::withHeaders([
+              'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
+            ])->get(config('app.api_rest_url').'/area_attribute');
+        $aux_atributos = json_decode($aux_atributos, true);
+        return $aux_atributos['Body_Area'];
       }
 
       private function get_categories() {
@@ -82,7 +124,7 @@ class evaluacion extends Controller {
         foreach ($areas['Area'] as $key => $area) {
           foreach ($id_areas_used['Pms_Rooms_Used'] as $key => $id_area_used) {
             if ($area['identifier_value'] == $id_area_used) {
-                $i=1;//echo $area['identifier_value'].'-';
+                $i=1;
             }
           }
           if ( $i == 0 ) {

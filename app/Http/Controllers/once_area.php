@@ -49,7 +49,7 @@ class once_area extends Controller {
 		          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
 		        ])->get(config('app.api_rest_url').'/atrribute/deleted');
 		        $aux_atributos = json_decode($aux_atributos, true);
-		        $count_aux_body=0;
+		        $count_aux_body=0; 
 				foreach ( $aux_body['Body_Area'] as $key => $value) {
 					foreach ( $aux_atributos['Attribute'] as $key => $atributo ) {
 						if ( $atributo['id'] ==  $value['ref_id_attribute'] ) {
@@ -113,6 +113,6 @@ class once_area extends Controller {
 		        $aux_categorie = $temp_aux_categorie['Categorie'];
 				return view('gestion_area')->with('config',$config)->with('unlock_pass','')->with('header',$aux_area_header[0])->with('body',$aux_body)->with('atributos',$aux_atributos['Attribute'])->with('id_header',$id)->with('categorias',$aux_categorie)->withSuccess('Gestionar Área');
 			}		
-		}
+		} 
 	}
 }

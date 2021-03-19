@@ -48,4 +48,6 @@ Route::namespace("App\\Http\\Controllers")->group(function () {
 
     Route::get("/pre_evaluar", "evaluacion@show_selection")->name('show_evaluar_type');
     Route::post("/pre_evaluar", "evaluacion@post_selection")->name('evaluar_type');
+
+    Route::get("/evaluacion/{id}", "show_evaluacion@main")->name('evaluacion_show');
 });
