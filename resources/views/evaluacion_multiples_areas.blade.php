@@ -20,7 +20,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary">Guardar Puntajes</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
@@ -43,37 +43,47 @@
     			<div class="card">
     			 	<div class="content"> 
                         <div class="content">
-                            <form>
-                                <label class="label" style="float: left;">Fecha</label>
-                                <label class="label" style="float: right;">Usuario</label>
+                            <form> 
+                                <label class="label" style="float: left; color: #4784e8;">Fecha <strong>{{ date("d-m-Y g:i a", strtotime($datos['header']['date'])) }}</strong></label>
+                                <label class="label" style="float: right;color: #4784e8;">Usuario <strong>{{$config['username']}}</strong></label>
                                 <br>
-                                <textarea class="form-control" placeholder="Comentarios Pre Revisión"></textarea>
+                                <input type="" name="id" hidden="true" readonly="true" value="{{$datos['header']['id']}}">
+                                <textarea class="form-control" placeholder="Comentarios Pre Revisión">{{$datos['header']['comentarios_in']}}</textarea>
                             </form>
                         </div>
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th>Id</th>
-                                    <th>Area</th>
-                                    <th>NickName</th>
-                                    <th>Puntaje Actual</th>
-                                    <th></th>
-                                </tr>
+                                <tr style="background-color: #4784e8;">   
+                                    <th style="color: #FFFFFF;text-align: center;"><strong>Id</strong></th>
+                                    <th style="color: #FFFFFF;text-align: center;"><strong>Area</strong></th>
+                                    <th style="color: #FFFFFF;text-align: center;"><strong>NickName</strong></th>
+                                    <th style="color: #FFFFFF;text-align: center;"><strong>Puntaje Actual</strong></th>
+                                    <th style="color: #FFFFFF;text-align: center;"></th>
+                                </tr>  
                             </thead>
-                            <tbody>
+                             <tbody>
                                 @forelse( $datos['aleat_areas'] as $key => $item)
-                                <tr>
-                                    <td>{{$key+1}}</td>
-                                    <td>{{$item['nickname']}}</td>
-                                    <td>{{$item['id']}}</td>
-                                    <td></td>
-                                    <td>
-                                        <div class="btn-group" role="group" aria-label="Basic example">
-                                            <button type="button" data-toggle="modal" data-target="#modal_evaluacion" class="btn btn-primary btn-sm attribute_admin" id="att_ad{{$item['id']}}"><i class="pe-7s-news-paper"></i></button>
-                                            <button type="button" class="btn btn-danger btn-sm"><i class="pe-7s-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                    @forelse( $datos['todas_areas'] as $key_b => $item_b)
+                                        @if($item_b['id'] == $item['ref_id_area'])
+                                        <tr>
+                                            <td>{{$key+1}}</td>
+                                            <td>{{$item_b['nickname']}}</td>
+                                            @if( is_null($item_b['identifier_value']) || $item_b['identifier_value'] == 0 || empty($item_b['identifier_value']) )
+                                                <td>Ninguno</td>
+                                            @else 
+                                                <td>{{$item_b['identifier_value']}}</td>
+                                            @endif
+                                            <td>{{$item['percent_review']}}</td>
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="Basic example">
+                                                    <button type="button" data-toggle="modal" data-target="#modal_evaluacion" class="btn btn-primary btn-sm attribute_admin" id="att_ad{{$item['ref_id_area']}}"><i class="pe-7s-news-paper"></i></button>
+                                                    <button type="button" class="btn btn-danger btn-sm"><i class="pe-7s-trash"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        @endif
+                                    @empty
+                                    @endforelse
                                 @empty
                                 @endforelse
                             </tbody>
@@ -81,8 +91,23 @@
                         <form>
                             <div class="row">
                                 <div class="col">  
-                                    <label>Añadir Area</label>
+                                    <label style="color: #4784e8;"><strong>Añadir Area</strong></label>
                                     <select class="form-control">
+                                        @php
+                                            $count = 0;
+                                            foreach( $datos['todas_areas'] as $key_a => $item_a) {
+                                                foreach( $datos['aleat_areas'] as $key_b => $item_b) {
+                                                    if( $item_a['id'] == $item_b['ref_id_area']) {
+                                                        $count++;
+                                                    }
+                                                }
+                                                if( $count > 0 ) {
+                                                    unset($datos['todas_areas'][$key_a]);
+                                                }
+                                                $count = 0;
+                                            }
+                                        @endphp
+
                                         @forelse( $datos['todas_areas'] as $key => $item)
                                             <option id="{{$item['nickname']}}">{{$item['nickname']}}</option>
                                         @empty
@@ -105,7 +130,7 @@
     $(document).ready(function() { 
         $('.attribute_admin').click(function() {  
             $("#table_atrr > tbody").empty();
-            var id_area = $(this).attr("id").slice(6); 
+            var id_area = $(this).attr("id").slice(6); //alert(id_area);
             var atributos = @json($datos['atributos']);//console.log(atributos);
             for (var i = atributos.length - 1; i >= 0; i--) { 
                 if ( atributos[i]['ref_id_header'] == id_area) {

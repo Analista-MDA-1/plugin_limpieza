@@ -28,9 +28,6 @@ class evaluacion extends Controller {
           'img' => str_replace('"','',base64_decode($_SESSION["img"])),
           'permisos' => json_decode( base64_decode($_SESSION["permisions"]), true)
         ];
-        if ($data['quantity'] < 1) {
-          return redirect()->back()->withErrors('Indique la Cantidad de Áreas');
-        }
         if ( $data['type'] == '200xc' ) {
           $all_areas = $this->selective_areas();
           $datos = [
@@ -46,6 +43,9 @@ class evaluacion extends Controller {
           ]);
         }
         else if ( $data['type'] == '350ms' ) { 
+          if ($data['quantity'] < 1) {
+            return redirect()->back()->withErrors('Indique la Cantidad de Áreas');
+          }  
           $areas = $this->random_areas($data['quantity']);
           if ( $areas[0] == 'max') {
             return redirect()->back()->withErrors('Solo hay '.$areas[1].' Áreas Disponibles..!');
@@ -71,7 +71,7 @@ class evaluacion extends Controller {
         return redirect()->route('evaluacion_show', $temp['Report_Header']);
         /*return view('evaluacion_multiples_areas')->with('datos',$datos)->with('config',$config)->with('unlock_pass','');
         return $datos;*/
-      }
+      }  
       private function get_report_body($id) {
         $aux_atributos = Http::withHeaders([
               'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
@@ -144,6 +144,7 @@ class evaluacion extends Controller {
         foreach ($areas as $key => $area) {
           $aux[$key]['id'] = $area['id'];
           $aux[$key]['nickname'] = $area['nickname'];
+          $aux[$key]['identifier_value'] = $area['identifier_value'];
           switch ( $area['statu_area'] ) {
             case 1:
               $aux[$key]['estado'] = 'Disponible';

@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class show_evaluacion extends Controller {
-
-  public function main($id) {
+ 
+ public function main($id) {
     $config = [
       'id' => base64_decode($_SESSION["id_user"]),
       'username' => str_replace('"','',base64_decode($_SESSION["username"])),
@@ -28,7 +28,7 @@ class show_evaluacion extends Controller {
       'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
     ])->get(config('app.api_rest_url').'/report_body_header/'.$id);
     $aux_body = json_decode($aux_body, true);
-    return $aux_body['Report_Body'];
+    return $aux_body['Report_Body'];      
   }
   private function data_header($id) {
     $aux_header = Http::withHeaders([
@@ -50,6 +50,7 @@ class show_evaluacion extends Controller {
     foreach ($areas as $key => $area) {
       $aux[$key]['id'] = $area['id'];
       $aux[$key]['nickname'] = $area['nickname'];
+      $aux[$key]['identifier_value'] = $area['identifier_value'];
       switch ( $area['statu_area'] ) {
         case 1:
           $aux[$key]['estado'] = 'Disponible';
