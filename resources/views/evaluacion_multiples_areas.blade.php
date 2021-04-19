@@ -88,11 +88,12 @@
                                 @endforelse
                             </tbody>
                         </table>
-                        <form>
+                        <form  method="POST" action="{{route('eva_new_area_add')}}">@csrf
+                            <input type="" name="report_id" value="{{$datos['header']['id']}}">
                             <div class="row">
                                 <div class="col">  
                                     <label style="color: #4784e8;"><strong>Añadir Area</strong></label>
-                                    <select class="form-control">
+                                    <select class="form-control" name="area">
                                         @php
                                             $count = 0;
                                             foreach( $datos['todas_areas'] as $key_a => $item_a) {
@@ -106,13 +107,13 @@
                                                 }
                                                 $count = 0;
                                             }
-                                        @endphp
+                                        @endphp  
 
                                         @forelse( $datos['todas_areas'] as $key => $item)
-                                            <option id="{{$item['nickname']}}">{{$item['nickname']}}</option>
+                                            <option id="{{$item['nickname']}}" value="{{$item['id']}}">{{$item['nickname']}}</option>
                                         @empty
                                         @endforelse
-                                    </select>
+                                    </select> 
                                 </div>
                                 <div class="col">
                                     <button class="btn btn-success">-></button>

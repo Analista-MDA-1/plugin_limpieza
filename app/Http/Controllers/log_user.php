@@ -8,11 +8,10 @@ use Illuminate\Support\Facades\Http;
 
 class log_user extends Controller
 {
-    public function login(request $data) { 
+    public function login(request $data) {        
 		$temp = Http::withHeaders([
         	'auth-tkn-pms' => config('app.api_rest_tkn'),
     	])->post(config('app.api_rest_url').'/login',$data->only('usuario','contras'));
-
 		if ( isset($temp['required'])  ) {
 			return redirect()->back()->withErrors('Llene los Datos');
 		}
@@ -25,6 +24,9 @@ class log_user extends Controller
 		if ( $temp == 'User Inactive') {
 			return redirect()->back()->withErrors('Usuario Desactivado');
 		}
+		if ( $temp == 'User Not Found') {
+			return redirect()->back()->withErrors('Usuario y/o Contraseña Inválidos');
+		} 
 		if ( $temp == 'Incorrect Values') {
 			return redirect()->back()->withErrors('Usuario y/o Contraseña Inválidos');
 		} 
@@ -36,14 +38,14 @@ class log_user extends Controller
 			$_SESSION["permisions"] = base64_encode( Http::post(config('app.api_rest_url').'/get_session_permission',['tkn'=>$temp]) );
 			
 			return redirect()->route('index')->with(["success" => "Inició Sessión"]); 
-		} 
+		}
 	}
 	public function logout(request $data) {
 		$temp= Http::post(config('app.api_rest_url').'/logout',[
 			'id_user'=>  base64_decode($_SESSION["id_user"]),
 			'aut_token'=>  base64_decode($_SESSION["tkn"])
 		]);
-		if ( $temp = 'Sessión Closed' ) {
+		if ( $temp = 'Sessión Closed' ) {   
 			session_destroy();
 			//session()->flush();
 			return redirect()->to(route('index'));

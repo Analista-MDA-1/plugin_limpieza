@@ -25,7 +25,7 @@ class categorias extends Controller {
     }
     else {
     	return redirect()->back();
-    }
+    }  
   }
 
   public function delete_attribute(request $data) {

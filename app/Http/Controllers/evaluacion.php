@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-session_start();
+session_start();   
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -212,4 +212,10 @@ class evaluacion extends Controller {
         }
         return $aux;
       }
+
+      public function add_area_evaluate(request $data) {
+        return $data;  
+      }
+
+
 }
