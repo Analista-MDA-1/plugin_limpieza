@@ -31,15 +31,15 @@
 			            		<td style="width: 20%;text-align: center;">{{ $area['nickname'] }}</td>
 			            		<td style="width: 20%;">{{ $area['estado'] }}</td>
 			            		<td style="width: 5%;" >
-			            			<a href="{{ route('gestionar_area', 1)}}" class="btn btn-info pe-7s-look"></a>
+			            			<a href="{{ route('gestionar_area', $area['id'])}}" class="btn btn-info pe-7s-look"></a>
 			            		</td>
 			            		<td style="width: 5%;">
-			            			<a href="{{ route('gestionar_area', 1)}}" class="btn btn-success pe-7s-note"></a>
+			            			<a href="{{ route('gestionar_area', $area['id'])}}" class="btn btn-success pe-7s-note"></a>
 			            		</td>
 			            		<td style="width: 5%;" >
 			            			<button type="button" class="btn btn-warning pe-7s-trash send_id" id="c{{$area['id']}}" data-toggle="modal" data-target="#eliminar"></button>
 			            		</td>
-		            		</form>
+		            		</form>		
     					</tr>
 	    			@endforeach
 	            </tbody>

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class area_header extends Controller {
-      
+        
   public function store_area(request $data) {
     if ( $data['ref_id_categorie'] == 'nix') {
       return redirect()->back()->withErrors('Seleccionar una Categoría');
@@ -16,7 +16,7 @@ class area_header extends Controller {
     }
     if ( empty($data['nickname']) || $data['nickname'] == '' ) {
       return redirect()->back()->withErrors('Indique un Apodo');
-    } 
+    }    
     if ( $data['statu_area'] == 'nix') {
       return redirect()->back()->withErrors('Seleccionar Estado Actual del Area');
     } 

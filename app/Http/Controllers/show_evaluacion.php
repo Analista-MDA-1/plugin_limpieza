@@ -64,10 +64,11 @@ class show_evaluacion extends Controller {
         case 4:
           $aux[$key]['estado'] = 'Deshabilitada';
         break;
-      }
-    }
+      }   
+    }   
     return $aux;
   }
+
   private function get_areas_not_used() {
     $areas = Http::withHeaders([ 
       'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),

@@ -1,5 +1,5 @@
 @extends('templated') 
-@section('body') 
+@section('body')  
 	<p class="lead"> 
         Gestión de Área
     </p>
@@ -79,7 +79,7 @@
 		    					</td>
 		    					<td><button type="submit" class="btn btn-success pe-7s-check"></button></td>
 		    					<td><button type="button" class="btn btn-warning pe-7s-trash send_id" data-toggle="modal" data-target="#eliminar" id="a{{ $line['id'] }}"></button></td>
-		    					</form>
+		    					</form>  
 	    					</tr>
 	    				@empty
 	    					<tr>

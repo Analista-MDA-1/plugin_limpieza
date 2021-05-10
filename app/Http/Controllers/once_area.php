@@ -20,7 +20,7 @@ class once_area extends Controller {
 			if ( $id == '' ) {
 				return redirect()->route('ver_areas')->withErrors('Parámetro Inválido');
 			}
-			else {
+			else { 
 				return view('gestion_area')->with('config',$config)->with('unlock_pass','')->withSuccess('Gestionar Área');
 			}		
 		}
@@ -46,7 +46,7 @@ class once_area extends Controller {
 		        ])->get(config('app.api_rest_url').'/get_area_attribute/'.$id);$temp = [];
 		        $aux_body = json_decode($aux_body, true);
 		        $aux_atributos = Http::withHeaders([
-		          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
+		          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),     
 		        ])->get(config('app.api_rest_url').'/atrribute/deleted');
 		        $aux_atributos = json_decode($aux_atributos, true);
 		        $count_aux_body=0; 
@@ -104,7 +104,7 @@ class once_area extends Controller {
 	        				}
 	        				$count_aux_header++;
 	        			}
-	        	}
+	        	}    
 		        //return $aux_area_header[0];	
 		        $temp_aux_categorie = Http::withHeaders([
 		          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
