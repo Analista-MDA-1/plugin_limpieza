@@ -27,7 +27,26 @@
                     <button type="submit" class="btn btn-primary">Guardar Puntajes</button>
                     </form>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>     
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="modal_delete_areas" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal_delete_areas_label">Eliminar "-----"</h5>
+                    <button type="button" class="close" data-dismiss="modal" ><span aria-hidden="true"></span></button>
                 </div>
+                <form method="POST" id="delete_area_form">
+                    <input type="" name="" id="dlt_area_id" hidden="true" readonly="true">
+                        <input type="" name="" id="dlt_area_ref_id" hidden="true" readonly="true">
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-warning">Quitar Área</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>     
             </div>
         </div>
     </div>
@@ -42,7 +61,7 @@
                 position: relative; 
             }
         </style>-->
-    	<div class="row">
+    	<div class="row" id="page"> 
     		<div class="col-md-2"></div>
     		<div class="col-md-8">
     			<div class="card">
@@ -53,8 +72,13 @@
                                 <label class="label" style="float: right;color: #4784e8;">Usuario <strong>{{$config['username']}}</strong></label>
                                 <br>
                                 <input type="" name="id" hidden="true" readonly="true" value="{{$datos['header']['id']}}">
-                                <textarea class="form-control" placeholder="Comentarios Pre Revisión" style="color: #4784E8;font-weight: bold;">{{$datos['header']['comentarios_in']}}</textarea>
+                                <textarea class="form-control" placeholder="Comentarios Pre Revisión" style="color: #4784E8;font-weight: bold;" id="comments_in"></textarea>
                             </form>
+                            <script type="text/javascript">
+                                $(document).ready(function(){
+
+                                });
+                            </script>
                         </div>
                         <div class="table-responsive" id="table_attr">
                             <table class="table">
@@ -67,24 +91,24 @@
                                         <th style="color: #FFFFFF;text-align: center;"></th>
                                     </tr>  
                                 </thead>
-                                 <tbody>
+                                 <tbody>  
                                     @forelse( $datos['aleat_areas'] as $key => $item)
                                         @forelse( $datos['todas_areas'] as $key_b => $item_b)
                                             @if($item_b['id'] == $item['ref_id_area'])
                                             <tr>
                                                 <td>{{$key+1}}</td>
-                                                <td>{{$item_b['nickname']}}</td>
+                                                <td id="area_nickname{{$item['id']}}">{{$item_b['nickname']}}</td>
                                                 @if( is_null($item_b['identifier_value']) || $item_b['identifier_value'] == 0 || empty($item_b['identifier_value']) )
                                                     <td>Ninguno</td>
                                                 @else 
                                                     <td>{{$item_b['identifier_value']}}</td>
                                                 @endif
-                                                <td>{{$item['percent_review']}}</td>
-                                                <input type="" name="" id="att_name_{{$item['ref_id_area']}}" value="{{$item_b['nickname']}}" hidden="true" readonly="true">
+                                                <td class="rev_per" id="rev_per{{$item['ref_id_area']}}">{{$item['percent_review']}}</td>
+                                                <input type="" name="area_ref_id{{$item['id']}}" id="att_name_{{$item['ref_id_area']}}" value="{{$item_b['nickname']}}" hidden="true" readonly="true">
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <button type="button" data-toggle="modal" data-target="#modal_evaluacion" class="btn btn-primary btn-sm attribute_admin" id="att_ad{{$item['ref_id_area']}}"><i class="pe-7s-news-paper"></i></button>
-                                                        <button type="button" class="btn btn-danger btn-sm"><i class="pe-7s-trash"></i></button>
+                                                        <button type="button" data-toggle="modal" data-target="#modal_evaluacion" class="btn btn-primary btn-sm attribute_admin" id="att_ad{{$item['ref_id_area']}}"><i class="pe-7s-news-paper"></i></button>  
+                                                        <button type="button" class="btn btn-danger btn-sm delete_area_btn" id="area_id{{$item['id']}}" data-toggle="modal" data-target="#modal_delete_areas"><i class="pe-7s-trash"></i></button>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -98,7 +122,7 @@
                         </div> 
                         <div class="table-responsive">
                             <form  method="POST" action="{{route('eva_new_area_add')}}">@csrf
-                                <input type="" name="report_id" value="{{$datos['header']['id']}}">
+                                <input type="" name="report_id" value="{{$datos['header']['id']}}" hidden="true" readonly="true">
                                 <div class="row">
                                     <div class="col">  
                                         <label style="color: #4784e8;"><strong>Añadir Area</strong></label>
@@ -134,6 +158,14 @@
     			</div>
     		</div>
     	</div>
+        <div class="row">
+            <div class="col-md-9"></div>   
+            <div class="col-md-2"> 
+                <input type="" name="" id="ap_rst_ul" value="{{ env('API_REST_URL') }} " hidden="true" readonly="true">
+                <input type="" name="" id="ap_rst_tn" value="{{ $config['tkn'] }}" hidden="true" readonly="true">
+                <button class="btn btn-info">GUARDAR Y GENERAR PDF</button>
+            </div> <div class="col-md-1"></div>
+        </div>
     </div>
 @endsection
 <script src="{{ asset('templated/js/jquery.3.2.1.min.js') }}" type="text/javascript" ></script>
@@ -160,7 +192,12 @@
                     $("#t_body_atrr").append(tr);
                 }
             }
-        });
+        }); 
+        $('.delete_area_btn').click(function() {
+           $('#dlt_area_id').val($(this).attr('id').slice(7));    
+           $('#modal_delete_areas_label').html('Desea Quitar <strong>'+ $('#area_nickname'+$(this).attr('id').slice(7)).html() +'</strong> ?' ); //area_ref_id att_name_ dlt_area_ref_id
+           $('#dlt_area_ref_id').val($("input[name=area_ref_id"+$(this).attr('id').slice(7)+"]").attr('id').slice(9)); 
+        });   
     });
     function max_ptn(id) {
         value = $('#at_in'+id).val();

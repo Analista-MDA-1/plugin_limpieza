@@ -36,7 +36,6 @@ class log_user extends Controller
 			$_SESSION["username"] = base64_encode(Http::post(config('app.api_rest_url').'/get_session_username',['tkn'=>$temp]));
 			$_SESSION["img"] = base64_encode(Http::post(config('app.api_rest_url').'/get_session_img',['tkn'=>$temp]));
 			$_SESSION["permisions"] = base64_encode( Http::post(config('app.api_rest_url').'/get_session_permission',['tkn'=>$temp]) );
-			
 			return redirect()->route('index')->with(["success" => "Inició Sessión"]); 
 		}
 	}

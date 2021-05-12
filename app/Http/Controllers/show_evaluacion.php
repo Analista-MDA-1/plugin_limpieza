@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 session_start();
-use Illuminate\Http\Request;
+use Illuminate\Http\Request; 
 use Illuminate\Support\Facades\Http;
 
 class show_evaluacion extends Controller {
@@ -12,7 +12,8 @@ class show_evaluacion extends Controller {
       'id' => base64_decode($_SESSION["id_user"]),
       'username' => str_replace('"','',base64_decode($_SESSION["username"])),
       'img' => str_replace('"','',base64_decode($_SESSION["img"])),
-      'permisos' => json_decode( base64_decode($_SESSION["permisions"]), true)
+      'permisos' => json_decode( base64_decode($_SESSION["permisions"]), true),
+      'tkn' => base64_decode($_SESSION["tkn"])
     ];
     $datos = [
       'todas_areas' => $this->selective_areas(),
