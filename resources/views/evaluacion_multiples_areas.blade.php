@@ -53,6 +53,7 @@
     </div>
 <!-- END MODALS -->
 @section('body') 
+    @if( $datos['header']['status'] == 2)
 	<p class="lead">
         Evaluación
     </p> 
@@ -120,7 +121,8 @@
                                     @endforelse
                                 </tbody>
                             </table>
-                        </div> 
+                        </div>
+                        <div class="content"> 
                         <div class="table-responsive">
                             <form  method="POST" action="{{route('eva_new_area_add')}}">@csrf
                                 <input type="" name="report_id" value="{{$datos['header']['id']}}" hidden="true" readonly="true" id="report_id_value">
@@ -128,7 +130,7 @@
                                     <div class="col">  
                                         <label style="color: #4784e8;"><strong>Añadir Area</strong></label>
                                         <select class="form-control" name="area" id="add_area_form">
-                                            @php
+                                            @php   
                                                 $count = 0;
                                                 foreach( $datos['todas_areas'] as $key_a => $item_a) {
                                                     foreach( $datos['aleat_areas'] as $key_b => $item_b) {
@@ -155,6 +157,7 @@
                                 </div>
                             </form>
                         </div>
+                        </div>
                     </div>
     			</div>
     		</div>
@@ -164,14 +167,94 @@
             <div class="col-md-2"> 
                 <form method="POST" id="save_print_serialice">
                     <input type="" name="" id="ap_rst_ul" value="{{ env('API_REST_URL') }} " hidden="true" readonly="true">
-                    <input type="" name="" id="ap_rst_tn" value="{{ $config['tkn'] }}" hidden="true" readonly="true">
+                    <input type="" name="" id="ap_rst_tn" value="{{ $config['tkn'] }}"  hidden="true" readonly="true">
                     <button type="submit" class="btn btn-info" id="print_sendDB">GUARDAR Y GENERAR PDF</button>
                 </form>
             </div> <div class="col-md-1"></div>
         </div>
     </div>
+    @elseif($datos['header']['status'] == 3)
+        <script type="text/javascript">
+            function print_pdf() {
+                var printContents = document.getElementById('total_page').innerHTML;
+                w = window.open();
+                w.document.write(printContents);
+                w.document.close();
+                w.focus();
+                w.print();
+                w.close();
+                return true;
+            }
+        </script>
+        <p class="lead">
+            Resumen de Evaluación
+            <button type="button" class="btn btn-info pe-7s-print" onclick="print_pdf();"></button>
+        </p> 
+        <style type="text/css">
+            @media print {
+                 #total_page { -webkit-print-color-adjust: exact;color-adjust: exact; }
+            }
+        </style>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2"></div> 
+                <div class="col-md-8" id="total_page">
+                    <div class="card">
+                        <div class="content"> 
+                            <div class="content">
+                                <h5 style="text-align: center;color: #794DC6"><strong>RESUMEN DE EVALUACION</strong></h5>
+                                <h6 style="float: left; color: #4784e8;">Fecha <strong>{{ date("d-m-Y g:i a", strtotime($datos['header']['date'])) }}</strong></h6>
+                                <h6 style="float: right;color: #4784e8;">Usuario <strong>{{$config['username']}}</strong></h6>
+                                <br><br><hr>
+                                <p style="color: #4784E8;font-weight: bold;">
+                                    <p>{{$datos['header']['comentarios_in']}}</p>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="table-responsive" id="table_attr">
+                            <table class="table" width="100%">
+                                <thead>
+                                    <tr style="background-color: #4784e8;">   
+                                        <th style="color: #FFFFFF;text-align: center;"><strong>Id</strong></th>
+                                        <th style="color: #FFFFFF;text-align: center;"><strong>Area</strong></th>
+                                        <th style="color: #FFFFFF;text-align: center;"><strong>NickName</strong></th>
+                                        <th style="color: #FFFFFF;text-align: center;"><strong>Puntaje</strong></th>
+                                    </tr>  
+                                </thead>
+                                <tbody>  
+                                    @forelse( $datos['aleat_areas'] as $key => $item)
+                                        @forelse( $datos['todas_areas'] as $key_b => $item_b)
+                                            @if($item_b['id'] == $item['ref_id_area'])
+                                            <tr>
+                                                <td>{{$key+1}}</td>
+                                                <td>{{$item_b['nickname']}}</td>
+                                                @if( is_null($item_b['identifier_value']) || $item_b['identifier_value'] == 0 || empty($item_b['identifier_value']) )
+                                                    <td>Ninguno</td>
+                                                @else 
+                                                    <td>{{$item_b['identifier_value']}}</td>
+                                                @endif
+                                                <td>{{$item['percent_review']}}</td>
+                                            </tr>
+                                            @endif
+                                        @empty
+                                        @endforelse
+                                    @empty
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </div>
+    @endif
 @endsection
+
+
 <script src="{{ asset('templated/js/jquery.3.2.1.min.js') }}" type="text/javascript" ></script>
+<script type="text/x-handlebars-template" id="template-dato">
+<script src="{{ asset('handlebars.min-v4.7.7.js') }}" type="text/javascript" ></script>
 <script type="text/javascript">
     $(document).ready(function() { 
         total_ptn_ha();

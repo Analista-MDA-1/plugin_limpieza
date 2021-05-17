@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 class show_evaluacion extends Controller {
  
  public function main($id) {
-    $config = [
+    $config = [ 
       'id' => base64_decode($_SESSION["id_user"]),
       'username' => str_replace('"','',base64_decode($_SESSION["username"])),
       'img' => str_replace('"','',base64_decode($_SESSION["img"])),
@@ -21,8 +21,17 @@ class show_evaluacion extends Controller {
       'header' => $this->data_header($id),
       'aleat_areas' => $this->data_body($id),
     ];
-    return view('evaluacion_multiples_areas')->with('datos',$datos)->with('config',$config)->with('unlock_pass','');
-    return $datos;
+    if (empty($datos['header']) || is_null($datos['header'])) {
+      $datos_header = [
+        'recurso' => 'Evaluación',
+        'id' => $id,
+      ];
+      return view('resource_not_found')->with('datos',$datos_header); 
+    }
+    else if ($datos['header']['status'] == 2 || $datos['header']['status'] == 3) {
+      return view('evaluacion_multiples_areas')->with('datos',$datos)->with('config',$config)->with('unlock_pass','');
+    }
+    //return $datos;
   }
   private function data_body($id) {
     $aux_body = Http::withHeaders([
@@ -36,7 +45,7 @@ class show_evaluacion extends Controller {
       'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
     ])->get(config('app.api_rest_url').'/report/'.$id);
     $aux_header = json_decode($aux_header, true);
-    return $aux_header['Report_Header'];
+    return $aux_header['Report_Header'];  
   }   
   private function data_atributtes() {
     $aux_atributos = Http::withHeaders([
@@ -85,7 +94,7 @@ class show_evaluacion extends Controller {
       foreach ($id_areas_used['Pms_Rooms_Used'] as $key => $id_area_used) {
         if ($area['identifier_value'] == $id_area_used) {
             $i=1;
-        }
+        }      
       }
       if ( $i == 0 ) {
         $temp['Area'][$count] = $area;

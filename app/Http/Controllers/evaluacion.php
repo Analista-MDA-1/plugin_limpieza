@@ -214,7 +214,25 @@ class evaluacion extends Controller {
       }
 
       public function add_area_evaluate(request $data) {
-        return $data;  
+        $id_report = $data['report_id'];
+        $new_area = $data['area'];
+        $temp_body = Http::withHeaders([
+          'auth-tkn-pms' => base64_decode($_SESSION["tkn"]),
+        ])->post(config('app.api_rest_url').'/report_body',[
+          'ref_id_header' => $id_report,
+          'ref_id_area' => $new_area
+        ]);
+        if ( $temp_body['Report_Body'] ) {
+          if ( $temp_body['Report_Body']  == 'Created' ) {
+            return redirect()->back()->withSuccess('Área Añadida');
+          }
+          else {
+            return redirect()->back()->withErrors('Error al Añadir Área');
+          }
+        } 
+        else {
+         return redirect()->back()->withErrors('Error al Añadir Área');
+        } 
       }
 
 
