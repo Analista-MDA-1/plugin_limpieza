@@ -24,6 +24,7 @@
                 </div>
                 <div class="modal-footer">
                     <input type="" name="area_id" id="area_id_modal_point" hidden="true" readonly="true">
+                    <input type="" name="area_body" id="area_body_modal_point" hidden="true" readonly="true">
                     <button type="submit" class="btn btn-primary">Guardar Puntajes</button>
                     </form>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -104,10 +105,10 @@
                                                     <td>{{$item_b['identifier_value']}}</td>
                                                 @endif
                                                 <td class="rev_per" id="rev_per{{$item['ref_id_area']}}">{{$item['percent_review']}}</td>
-                                                <input type="" name="area_ref_id{{$item['id']}}" id="att_name_{{$item['ref_id_area']}}" value="{{$item_b['nickname']}}" hidden="true" readonly="true">
+                                                <input type="" name="area_ref_id{{$item['id']}}" id="att_name_{{$item['ref_id_area']}}" value="{{$item_b['nickname']}}" hidden="true" readonly="true" class="point_area_values">
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic example">
-                                                        <button type="button" data-toggle="modal" data-target="#modal_evaluacion" class="btn btn-primary btn-sm attribute_admin" id="att_ad{{$item['ref_id_area']}}"><i class="pe-7s-news-paper"></i></button>  
+                                                        <button type="button" data-toggle="modal" data-target="#modal_evaluacion" class="btn btn-primary btn-sm attribute_admin" id="att_ad{{$item['ref_id_area']}}" name="{{$item['id']}}"><i class="pe-7s-news-paper"></i></button>  
                                                         <button type="button" class="btn btn-danger btn-sm delete_area_btn" id="area_id{{$item['id']}}" data-toggle="modal" data-target="#modal_delete_areas"><i class="pe-7s-trash"></i></button>
                                                     </div>
                                                 </td>
@@ -122,11 +123,11 @@
                         </div> 
                         <div class="table-responsive">
                             <form  method="POST" action="{{route('eva_new_area_add')}}">@csrf
-                                <input type="" name="report_id" value="{{$datos['header']['id']}}" hidden="true" readonly="true">
+                                <input type="" name="report_id" value="{{$datos['header']['id']}}" hidden="true" readonly="true" id="report_id_value">
                                 <div class="row">
                                     <div class="col">  
                                         <label style="color: #4784e8;"><strong>Añadir Area</strong></label>
-                                        <select class="form-control" name="area">
+                                        <select class="form-control" name="area" id="add_area_form">
                                             @php
                                                 $count = 0;
                                                 foreach( $datos['todas_areas'] as $key_a => $item_a) {
@@ -149,7 +150,7 @@
                                         </select> 
                                     </div>
                                     <div class="col">
-                                        <button class="btn btn-success">-></button>
+                                        <button class="btn btn-success" id="add_area_btn">-></button>
                                     </div> 
                                 </div>
                             </form>
@@ -161,9 +162,11 @@
         <div class="row">
             <div class="col-md-9"></div>   
             <div class="col-md-2"> 
-                <input type="" name="" id="ap_rst_ul" value="{{ env('API_REST_URL') }} " hidden="true" readonly="true">
-                <input type="" name="" id="ap_rst_tn" value="{{ $config['tkn'] }}" hidden="true" readonly="true">
-                <button class="btn btn-info">GUARDAR Y GENERAR PDF</button>
+                <form method="POST" id="save_print_serialice">
+                    <input type="" name="" id="ap_rst_ul" value="{{ env('API_REST_URL') }} " hidden="true" readonly="true">
+                    <input type="" name="" id="ap_rst_tn" value="{{ $config['tkn'] }}" hidden="true" readonly="true">
+                    <button type="submit" class="btn btn-info" id="print_sendDB">GUARDAR Y GENERAR PDF</button>
+                </form>
             </div> <div class="col-md-1"></div>
         </div>
     </div>
@@ -177,6 +180,7 @@
             $("#table_atrr > tbody").empty();
             var id_area = $(this).attr("id").slice(6); //alert(id_area);
             $("#area_id_modal_point").val(id_area);
+            $("#area_body_modal_point").val($(this).attr('name'));
             $("#label_modal_header").html('Puntuación de <strong>' + $("#att_name_"+id_area).val() + '</strong>' );
             var atributos = @json($datos['atributos']);//console.log(atributos);
             for (var i = atributos.length - 1; i >= 0; i--) { 

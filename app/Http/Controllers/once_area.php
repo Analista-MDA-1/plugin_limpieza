@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Http;
 
 class once_area extends Controller {
 
-	public function show($id='') {   
+	/*public function show($id='') {   
 		if ( !isset($_SESSION["tkn"]) ) { 
     		return view('index');
 		}
@@ -24,7 +24,8 @@ class once_area extends Controller {
 				return view('gestion_area')->with('config',$config)->with('unlock_pass','')->withSuccess('Gestionar Área');
 			}		
 		}
-	}
+	}*/
+	
 	public function show_edit($id='') {   
 		if ( !isset($_SESSION["tkn"]) ) { 
     		return view('index');

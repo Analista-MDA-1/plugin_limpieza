@@ -40,6 +40,7 @@ Route::namespace("App\\Http\\Controllers")->group(function () {
     Route::post("/categorias.store", "categorias@store_categorie")->name('store_categoria');
     //Route::get("/ver_area/{id?}", "once_area@show")->name('ver_area');
     Route::get("/gestionar_area/{id?}", "once_area@show_edit")->name('gestionar_area');
+    Route::get("/ver_area/{id?}", "once_area_view@show")->name('ver_area');
     Route::get("/mi_perfil", "profile_setting@mostrar_perfil")->name('editar_perfil');
 
     Route::post("/nueva_area", "area_header@store_area")->name('store_header_area');

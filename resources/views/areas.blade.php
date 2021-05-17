@@ -31,7 +31,7 @@
 			            		<td style="width: 20%;text-align: center;">{{ $area['nickname'] }}</td>
 			            		<td style="width: 20%;">{{ $area['estado'] }}</td>
 			            		<td style="width: 5%;" >
-			            			<a href="{{ route('gestionar_area', $area['id'])}}" class="btn btn-info pe-7s-look"></a>
+			            			<a href="{{ route('ver_area', $area['id'])}}" class="btn btn-info pe-7s-look"></a>
 			            		</td>
 			            		<td style="width: 5%;">
 			            			<a href="{{ route('gestionar_area', $area['id'])}}" class="btn btn-success pe-7s-note"></a>
